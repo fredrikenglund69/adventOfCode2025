@@ -1,45 +1,53 @@
-data dd;
+﻿data dd;
 
  length rot $200;
- retain currVal passwd;
+ retain currVal prevVal passwd passwd2;
 
  filename _infile '/opt/sas/lagring/Lev4/it/adventOfCode/aoc2025/dec_01_input.txt';
  infile _infile delimiter='' end=last;
 
  input rot;
 
- dial = 100;
-
  if _n_ = 1 then do;
-    currVal = 50;
-    passwd = 0;
+ 	currVal = 50;
  end;
- 
 
- /* remove multiple rotaions and keep only number of steps within the dial */
- partOfDial = mod(input(substr(rot,2),8.)/dial,1);
- noLaps = int(input(substr(rot,2),8.)/dial);
+ prevVal = currVal;
 
- *passwd = passwd + noLaps; /* for each lap 0 is passed */
- step = dial * partOfDial;
+ dir = substr(rot,1,1);
+ steps = input(substr(rot,2),8.);
 
- oldCurrVal = currVal;
+ if dir = 'L' then currVal = currVal - steps;
+ else currVal = currVal + steps;
 
- if upcase(substr(rot,1,1)) = 'L' then newVal = currVal + (dial - step); /* -10 is the same as +90 for dial = 100 */
- if upcase(substr(rot,1,1)) = 'R' then newVal = currVal + step;
+ if 200 > currVal > 100 or -200 < currVal < -100 then passwd2 + 1;
 
- if newVal >= dial then currVal = newVal - dial;
- else if newVal < 0 then currVal = dial + newVal;
- else currVal = NewVal;
+ laps = abs(int(steps/100));
+ currVal = mod(currVal/100,1) * 100;
+ passwd2 = passwd2 + laps;
 
- if currVal = 0 then passwd + 1;
+ /* handle toggle around 0 */
+ if prevVal < 0 and currVal > 0 then passwd2 + 1;
+ if prevVal > 0 and currVal < 0 then passwd2 + 1;
 
- if last then put '***   Password is: ' passwd;
+ if currVal = 0 then do;
+	passwd + 1;
+	passwd2 + 1;
+ end;
 
+ *if currVal < 0 then currVal = 100 + currVal;
 
 run;
  
 /*
 5738 - too high
 1169 - too low 
+1172 - correct
+
+
+part 2
+1308 - too low
+6780 - too low
+7825 - nc
+6985 - nc
 */
