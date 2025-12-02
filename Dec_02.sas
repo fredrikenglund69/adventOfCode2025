@@ -2,7 +2,7 @@ data _input;
 
  length interVal $200;
 
- filename _infile '/opt/sas/lagring/Lev4/it/adventOfCode/aoc2025/dec_02_test.txt';
+ filename _infile '/opt/sas/lagring/Lev4/it/adventOfCode/aoc2025/dec_02_input.txt';
  infile _infile delimiter=',' end=last;
 
  input interVal @@;
@@ -35,3 +35,7 @@ proc summary data=_output nway missing;
  var match;
  output out=_sum sum=;
 run;
+
+/*
+44487518100 - too high
+*/
