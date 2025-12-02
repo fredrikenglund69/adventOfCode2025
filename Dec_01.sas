@@ -20,22 +20,23 @@
  if dir = 'L' then currVal = currVal - steps;
  else currVal = currVal + steps;
 
- if 200 > currVal > 100 or -200 < currVal < -100 then passwd2 + 1;
+ if prevVal ne 0 and (200 > currVal > 100) or (-200 < currVal < -100) then passwd2 + 1;
+
+ /* handle toggle around 0 */
+ if prevVal < 0 and currVal > 0 then passwd2 + 1;
+ if prevVal > 0 and currVal < 0 then passwd2 + 1;
 
  laps = abs(int(steps/100));
  currVal = mod(currVal/100,1) * 100;
  passwd2 = passwd2 + laps;
 
- /* handle toggle around 0 */
- if prevVal < 0 and currVal > 0 then passwd2 + 1;
- if prevVal > 0 and currVal < 0 then passwd2 + 1;
 
  if currVal = 0 then do;
 	passwd + 1;
 	passwd2 + 1;
  end;
 
- *if currVal < 0 then currVal = 100 + currVal;
+ if currVal < 0 then currVal = 100 + currVal;
 
 run;
  
@@ -50,4 +51,5 @@ part 2
 6780 - too low
 7825 - nc
 6985 - nc
+7100 - nc
 */
