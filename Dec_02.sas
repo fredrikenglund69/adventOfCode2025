@@ -2,7 +2,7 @@ data _input;
 
  length interVal $200;
 
- filename _infile '/opt/sas/lagring/Lev4/it/adventOfCode/aoc2025/dec_02_input.txt';
+ filename _infile '/opt/sas/lagring/Lev4/it/adventOfCode/aoc2025/dec_02_test.txt';
  infile _infile delimiter=',' end=last;
 
  input interVal @@;
@@ -17,6 +17,10 @@ data _input;
 
 run;
 
+proc sort data=_input nodupkey;
+ by pid;
+run;
+
 data _output;
  set _input;
  length pidC $200 half1 half2 $100;
@@ -27,7 +31,7 @@ data _output;
  half1 = substr(pidC,1,halflen);
  half2 = substr(pidC,halflen+1);
 
- if half1 = half2 then match = pid;
+ if len > 1 and half1 = half2 then match = pid;
 
 run;
 
@@ -38,4 +42,8 @@ run;
 
 /*
 44487518100 - too high
+44487518055 - correct
+
+Part 2
+
 */
