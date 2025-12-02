@@ -17,27 +17,24 @@
  dir = substr(rot,1,1);
  steps = input(substr(rot,2),8.);
 
- if dir = 'L' then currVal = currVal - steps;
- else currVal = currVal + steps;
+ *put dir= steps=;
 
- if prevVal ne 0 and (200 > currVal > 100) or (-200 < currVal < -100) then passwd2 + 1;
+ do i = 1 to steps;
+	 if dir = 'L' then currVal = currVal - 1;
+	 else currVal = currVal + 1;
 
- /* handle toggle around 0 */
- if prevVal < 0 and currVal > 0 then passwd2 + 1;
- if prevVal > 0 and currVal < 0 then passwd2 + 1;
+	 if currVal = 100 then currVal = 0;
+	 if currVal < 0 then currVal = 99;
+	 *put currVal=;
 
- laps = abs(int(steps/100));
- currVal = mod(currVal/100,1) * 100;
- passwd2 = passwd2 + laps;
-
+	 if currVal = 0 then passwd2 + 1;
+ end;
 
  if currVal = 0 then do;
 	passwd + 1;
-	passwd2 + 1;
  end;
 
- if currVal < 0 then currVal = 100 + currVal;
-
+ if last then put passwd= passwd2=;
 run;
  
 /*
@@ -52,4 +49,5 @@ part 2
 7825 - nc
 6985 - nc
 7100 - nc
+6932 - 
 */
